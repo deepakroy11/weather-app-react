@@ -4,6 +4,13 @@ import WeatherCard from "./components/WeatherCard";
 import { SiAccuweather, SiTailwindcss } from "react-icons/si";
 import { FaReact } from "react-icons/fa";
 
+if (!import.meta.env.VITE_WEATHER_API_URL) {
+  console.warn(
+    "Weather API key is missing. Please set VITE_WEATHER_API_KEY in your .env file."
+  );
+}
+const WEATHER_API =
+  import.meta.env.VITE_WEATHER_API_URL || "https://api.weatherapi.com/v1";
 const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
 export interface LocationProps {
@@ -54,7 +61,7 @@ export default function App() {
       try {
         setIsLoading(true);
         const res = await fetch(
-          `https://api.weatherapi.com/v1/search.json?key=${WEATHER_API_KEY}&q=${value}`
+          `${WEATHER_API}/search.json?key=${WEATHER_API_KEY}&q=${value}`
         );
         const data: LocationProps[] = await res.json();
         setLocations(data);
@@ -79,7 +86,7 @@ export default function App() {
 
     try {
       const res = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=3`
+        `${WEATHER_API}/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=3`
       );
       const data = await res.json();
       console.log(data);
